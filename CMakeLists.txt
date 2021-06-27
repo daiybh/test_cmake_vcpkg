@@ -1,14 +1,14 @@
 cmake_minimum_required (VERSION 3.16)
-set(VCPKG_TARGET_ARCHITECTURE x64)
-set(VCPKG_CRT_LINKAGE static)
-set(VCPKG_LIBRARY_LINKAGE static)
 
-project ("tttt")
- find_package(CURL CONFIG REQUIRED)
- find_package(Boost COMPONENTS filesystem REQUIRED)
+project ("tttt${VCPKG_TARGET_TRIPLET}")
 
- message("this is ${Boost_INCLUDE_DIRS}"   ${Boost_LIBRARIES})
-add_executable(tt "libcurl_ftp.cpp" "main.cpp")
+find_package(CURL CONFIG REQUIRED)
+find_package(Boost COMPONENTS filesystem REQUIRED)
 
-#target_include_directories(tt PRIVATE ${Boost_INCLUDE_DIRS})
- target_link_libraries(tt PRIVATE CURL::libcurl ${Boost_LIBRARIES})
+message("this is ${Boost_INCLUDE_DIRS}"   ${Boost_LIBRARIES})
+add_executable(tt  "main.cpp" "libcurl_ftp.cpp")
+
+#set runtime /mt /mtd
+set_property(TARGET tt PROPERTY  MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+target_link_libraries(tt PRIVATE CURL::libcurl ${Boost_LIBRARIES})

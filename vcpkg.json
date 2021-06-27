@@ -1,8 +1,0 @@
-{
-    "name": "backend",
-    "version": "0",
-  "dependencies": [
-    "curl",
-    "boost-filesystem"
-  ]
-}
