@@ -1,126 +1,143 @@
 {
     "version": 2,
     "cmakeMinimumRequired": {
-      "major": 3,
-      "minor": 20,
-      "patch": 0
+        "major": 3,
+        "minor": 20,
+        "patch": 0
     },
     "configurePresets": [
-      {
-        "name": "base",
-        "description": "Sets generator, build and install directory, vcpkg",
-        "hidden": true,
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/out/build/${presetName}",
-        "cacheVariables": {
-          "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
-          "CMAKE_TOOLCHAIN_FILE": {
-            "type": "FILEPATH",
-            "value": "D:/Codes/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        {
+            "name": "base",
+            "description": "Sets generator, build and install directory, vcpkg",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_TOOLCHAIN_FILE": {
+                    "type": "FILEPATH",
+                    "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+                },
+                "BUILD_SHARED_LIBS": "off"
+            },
+            "environment": {
+                "VCPKG_FEATURE_FLAGS": "manifests,versions,binarycaching,registries"
+            }
+        },
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "description": "Sets x64 arch, compilers, build type",
+            "inherits": [
+                "base"
+            ],
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+          "cacheVariables": {
+            "VCPKG_TARGET_TRIPLET": "x64-windows-static",
+            "CMAKE_MAKE_PROGRAM": "C:\\PROGRAM FILES (X86)\\MICROSOFT VISUAL STUDIO\\2019\\ENTERPRISE\\COMMON7\\IDE\\COMMONEXTENSIONS\\MICROSOFT\\CMAKE\\Ninja\\ninja.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/cl.exe"
           },
-          "BUILD_SHARED_LIBS":"off"
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Windows"
+                    ]
+                }
+            }
         },
-        "environment": {
-          "VCPKG_FEATURE_FLAGS": "manifests,versions,binarycaching,registries"
-        }
-      },
-      {
-        "name": "x64-windows-release",
-        "description": "Sets x64 arch, compilers, build type",
-        "inherits": [ "base" ],
-        "architecture": {
-          "value": "x64",
-          "strategy": "external"
+        {
+            "name": "x64-windows-Debug",
+            "description": "Sets x64 windows Debug",
+            "inherits": "windows-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
         },
-        "cacheVariables": {
-          "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+        {
+            "name": "x64-windows-Release",
+            "description": "Sets x64 windows Release",
+            "inherits": "windows-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         },
-        "vendor": {
-          "microsoft.com/VisualStudioSettings/CMake/1.0": {
-            "hostOS": [ "Windows" ]
-          }
-        }
-      },
-      {
-        "name": "x64-windows-Debug",
-        "description": "Sets x64 windows Debug",
-        "inherits": "x64-windows-release",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug"
-        }
-
-      },
-      {
-        "name": "linux-base",
-        "description": "Sets compilers, build type",
-        "inherits": "base",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug",
-          "CMAKE_CXX_COMPILER": "g++-7"
+        {
+            "name": "linux-base",
+            "description": "Sets compilers, build type",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_COMPILER": "g++-7"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ]
+                }
+            }
         },
-        "vendor": {
-          "microsoft.com/VisualStudioSettings/CMake/1.0": {
-            "hostOS": [ "Linux" ]
-          }
+        {
+            "name": "linux-warnings",
+            "description": "Enables dev warnings (-wdev)",
+            "inherits": "linux-base",
+            "warnings": {
+                "dev": true
+            }
         }
-      },
-      {
-        "name": "linux-warnings",
-        "description": "Enables dev warnings (-wdev)",
-        "inherits": "linux-base",
-        "warnings": {
-          "dev": true
-        }
-      }
     ],
     "buildPresets": [
-      {
-        "name": "core-build",
-        "description": "Inherits environment from base configurePreset",
-        "configurePreset": "base",
-        "hidden": true,
-        "inheritConfigureEnvironment": true
-  
-      },
-      {
-        "name": "clean-build",
-        "description": "Clean before build (--clean-first)",
-        "configurePreset": "x64-windows-release",
-        "inherits": "core-build",
-        "cleanFirst": true
-      },
-      {
-        "name": "verbose-build",
-        "description": "Passes -v to Ninja",
-        "configurePreset": "x64-windows-release",
-        "inherits": "core-build",
-        "nativeToolOptions": [ "-v" ]
-      },
-      {
-        "name": "linux-clean-build",
-        "configurePreset": "linux-base",
-        "inherits": "clean-build"
-      }
+        {
+            "name": "core-build",
+            "description": "Inherits environment from base configurePreset",
+            "configurePreset": "base",
+            "hidden": true,
+            "inheritConfigureEnvironment": true
+        },
+        {
+            "name": "clean-build",
+            "description": "Clean before build (--clean-first)",
+            "configurePreset": "x64-windows-Debug",
+            "inherits": "core-build",
+            "cleanFirst": true
+        },
+        {
+            "name": "verbose-build",
+            "description": "Passes -v to Ninja",
+            "configurePreset": "x64-windows-Debug",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "linux-clean-build",
+            "configurePreset": "linux-base",
+            "inherits": "clean-build"
+        }
     ],
     "testPresets": [
-      {
-        "name": "core-test",
-        "description": "Enable output on failure",
-        "configurePreset": "base",
-        "hidden": false,
-        "output": {
-          "outputOnFailure": true
+        {
+            "name": "core-test",
+            "description": "Enable output on failure",
+            "configurePreset": "base",
+            "hidden": false,
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "windows-core-test",
+            "configurePreset": "x64-windows-Debug",
+            "inherits": "core-test"
+        },
+        {
+            "name": "linux-core-test",
+            "configurePreset": "linux-base",
+            "inherits": "core-test"
         }
-      },
-      {
-        "name": "windows-core-test",
-        "configurePreset": "x64-windows-release",
-        "inherits": "core-test"
-      },
-      {
-        "name": "linux-core-test",
-        "configurePreset": "linux-base",
-        "inherits": "core-test"
-      }
     ]
-  }
+}
