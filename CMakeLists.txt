@@ -2,9 +2,10 @@ cmake_minimum_required (VERSION 3.16)
 
 project ("tttt${VCPKG_TARGET_TRIPLET}")
 
+message(status "aaaaaaaaaaCMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE}")
+message(status "aaaaaaaaaaVCPKG_TARGET_TRIPLET ${VCPKG_TARGET_TRIPLET}")
 find_package(CURL CONFIG REQUIRED)
 find_package(Boost COMPONENTS filesystem REQUIRED)
-
 message("this is ${Boost_INCLUDE_DIRS}"   ${Boost_LIBRARIES})
 add_executable(tt  "main.cpp" "libcurl_ftp.cpp")
 
