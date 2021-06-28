@@ -1,0 +1,8 @@
+{
+    "name":"testcmakevcpkg",
+    "version":"0",
+    "dependencies":[
+      "curl",
+      "boost-filesystem"
+    ]
+}
