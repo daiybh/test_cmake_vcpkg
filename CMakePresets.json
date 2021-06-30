@@ -12,6 +12,10 @@
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "architecture":{
+                "value":"x64",
+                "strategy": "external"
+            },
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
                 "CMAKE_TOOLCHAIN_FILE": {
@@ -36,9 +40,9 @@
                 "strategy": "external"
             },
           "cacheVariables": {
-            "VCPKG_TARGET_TRIPLET": "x64-windows-static",
-            "CMAKE_MAKE_PROGRAM": "C:\\PROGRAM FILES (X86)\\MICROSOFT VISUAL STUDIO\\2019\\ENTERPRISE\\COMMON7\\IDE\\COMMONEXTENSIONS\\MICROSOFT\\CMAKE\\Ninja\\ninja.exe",
-            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/cl.exe"
+            "VCPKG_TARGET_TRIPLET": "x64-windows-static",            
+            "CMAKE_CXX_COMPILER": "cl",
+            "CMAKE_C_COMPILER": "cl"
           },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
